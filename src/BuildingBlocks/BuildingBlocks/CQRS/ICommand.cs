@@ -5,5 +5,5 @@ namespace BuildingBlocks.CQRS;
 
 public interface ICommand : IRequest;
 
-public interface ICommand<TResponse> : IRequest<ErrorOr<TResponse>>
+public interface ICommand<out TResponse> : IRequest<TResponse>
     where TResponse : IErrorOr;

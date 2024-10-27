@@ -3,6 +3,7 @@
 	<ItemGroup>
     <PackageReference Include="Carter" Version="8.2.1" />
     <PackageReference Include="ErrorOr" Version="2.0.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
     <PackageReference Include="Mapster" Version="7.4.0" />
     <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="StronglyTypedId" Version="1.0.0-beta08" ExcludeAssets="runtime" />
