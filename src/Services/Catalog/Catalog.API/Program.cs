@@ -1,5 +1,3 @@
-using BuildingBlocks;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddBuildingBlocks();

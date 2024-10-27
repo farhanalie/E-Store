@@ -22,15 +22,15 @@ public static class CreateProduct
 
     internal sealed class Handler(IDocumentSession session) : ICommandHandler<Command, ErrorOr<Response>>
     {
-        public async Task<ErrorOr<Response>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Response>> Handle(Command command, CancellationToken cancellationToken)
         {
             var product = new Product
             {
-                Name = request.Name,
-                Category = request.Category,
-                Description = request.Description,
-                ImageFile = request.ImageFile,
-                Price = request.Price
+                Name = command.Name,
+                Category = command.Category,
+                Description = command.Description,
+                ImageFile = command.ImageFile,
+                Price = command.Price
             };
 
             session.Store(product);
@@ -46,25 +46,21 @@ public static class CreateProduct
         {
             RuleFor(x => x.Name).NotEmpty();
             RuleFor(x => x.Category).NotEmpty();
+            RuleFor(x => x.Description).MaximumLength(1000);
             RuleFor(x => x.ImageFile).NotEmpty();
             RuleFor(x => x.Price).GreaterThan(0);
         }
     }
 
-    public class Endpoint : ICarterModule
+    public class Endpoint : EndpointModule
     {
-        public void AddRoutes(IEndpointRouteBuilder app)
+        public override void AddRoutes(IEndpointRouteBuilder app)
         {
             app.MapPost("/products",
                 async (Request request, ISender sender) =>
-                {
-                    var command = request.Adapt<Command>();
-                    var result = await sender.Send(command);
-
-                    return result.Match(
-                        success => Results.Created($"/products/{success.ProductId}", success),
-                        _ => Results.Problem());
-                });
+                    await Handle(request.Adapt<Command>(), sender,
+                        response => Results.Created($"/products/{response.ProductId}", response))
+            );
         }
     }
 }
