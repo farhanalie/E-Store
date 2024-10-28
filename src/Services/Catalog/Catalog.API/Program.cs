@@ -4,11 +4,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddBuildingBlocks();
 
+var connectionString = builder.Configuration.GetConnectionString("Database")!;
 builder.Services
     .AddMarten(options =>
     {
         // Establish the connection string to your Marten database
-        options.Connection(builder.Configuration.GetConnectionString("Database")!);
+        options.Connection(connectionString);
         // Specify that we want to use STJ as our serializer
         options.UseSystemTextJsonForSerialization();
     })
@@ -16,6 +17,9 @@ builder.Services
 
 if (builder.Environment.IsDevelopment())
     builder.Services.InitializeMartenWith<CatalogInitialData>();
+
+builder.Services.AddHealthChecks()
+    .AddNpgSql(connectionString);
 
 var app = builder.Build();
 
