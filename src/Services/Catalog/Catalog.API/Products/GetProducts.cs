@@ -23,6 +23,15 @@ public static class GetProducts
         }
     }
 
+    public class Validator : AbstractValidator<Query>
+    {
+        public Validator()
+        {
+            RuleFor(x => x.PageNumber).GreaterThanOrEqualTo(1);
+            RuleFor(x => x.PageSize).GreaterThanOrEqualTo(1);
+        }
+    }
+
     public class Endpoint : EndpointModule
     {
         public override void AddRoutes(IEndpointRouteBuilder app)

@@ -1,3 +1,5 @@
+using Catalog.API.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddBuildingBlocks();
@@ -11,6 +13,9 @@ builder.Services
         options.UseSystemTextJsonForSerialization();
     })
     .UseLightweightSessions();
+
+if (builder.Environment.IsDevelopment())
+    builder.Services.InitializeMartenWith<CatalogInitialData>();
 
 var app = builder.Build();
 
