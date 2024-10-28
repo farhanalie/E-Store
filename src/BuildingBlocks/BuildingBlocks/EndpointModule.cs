@@ -21,15 +21,15 @@ public abstract class EndpointModule : ICarterModule
 
         return result.Match(
             response => onSuccess(response),
-            ToProblemResult);
+            ProblemResult);
     }
 
-    public static IResult ToProblemResult(List<Error> errors)
+    public static IResult ProblemResult(List<Error> errors)
     {
-        return Results.Problem(ToProblemDetails(errors));
+        return Results.Problem(ProblemDetails(errors));
     }
 
-    public static ProblemDetails ToProblemDetails(List<Error> errors)
+    public static ProblemDetails ProblemDetails(List<Error> errors)
     {
         if (errors.Count is 0)
         {
@@ -38,13 +38,13 @@ public abstract class EndpointModule : ICarterModule
 
         if (errors.All(error => error.Type == ErrorType.Validation))
         {
-            return ToValidationProblemResult(errors).ProblemDetails;
+            return ValidationProblemResult(errors).ProblemDetails;
         }
 
-        return ToProblemResult(errors[0]).ProblemDetails;
+        return ProblemResult(errors[0]).ProblemDetails;
     }
 
-    private static ProblemHttpResult ToProblemResult(Error error)
+    public static ProblemHttpResult ProblemResult(Error error)
     {
         var statusCode = error.Type switch
         {
@@ -58,7 +58,7 @@ public abstract class EndpointModule : ICarterModule
         return TypedResults.Problem(statusCode: statusCode, title: error.Description);
     }
 
-    private static ValidationProblem ToValidationProblemResult(IEnumerable<Error> errors)
+    private static ValidationProblem ValidationProblemResult(IEnumerable<Error> errors)
     {
         var validationErrors = errors
             .GroupBy(error => error.Code)

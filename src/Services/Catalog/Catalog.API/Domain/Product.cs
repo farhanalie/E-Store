@@ -1,4 +1,4 @@
-﻿namespace Catalog.API.Domain.Entities;
+﻿namespace Catalog.API.Domain;
 
 public class Product
 {
