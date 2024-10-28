@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using BuildingBlocks.Behaviors;
+using BuildingBlocks.Exceptions;
 using Carter;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,8 @@ public static class DependencyInjection
 {
     public static IHostApplicationBuilder AddBuildingBlocks(this IHostApplicationBuilder builder)
     {
+        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
         var assembly = Assembly.GetEntryAssembly()!;
 
         builder.Services.AddMediatR(cfg =>
