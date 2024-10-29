@@ -3,6 +3,4 @@
 namespace BuildingBlocks.Identifiers;
 
 [StronglyTypedId(Template.Int)]
-public partial struct ProductId
-{
-}
+public partial struct ProductId;
