@@ -10,4 +10,5 @@ global using BuildingBlocks;
 global using BuildingBlocks.Models;
 global using BuildingBlocks.Identifiers;
 global using BuildingBlocks.CQRS;
-global using Catalog.API.Domain;
+global using Basket.API.Domain;
+global using Basket.API.Data;
