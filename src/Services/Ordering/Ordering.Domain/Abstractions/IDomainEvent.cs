@@ -1,6 +1,10 @@
-﻿namespace Ordering.Domain.Abstractions;
+﻿using MediatR;
 
-public interface IDomainEvent
+namespace Ordering.Domain.Abstractions;
+
+public interface IDomainEvent : INotification
 {
-    
+    Guid EventId => Guid.NewGuid();
+    DateTime OccurredOn => DateTime.Now;
+    string EventType => GetType().AssemblyQualifiedName!;
 }
