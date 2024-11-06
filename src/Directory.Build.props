@@ -6,5 +6,6 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <WarningsNotAsErrors>NU1608</WarningsNotAsErrors>
     </PropertyGroup>
 </Project>

@@ -4,14 +4,19 @@ public class Order : Aggregate<OrderId>
 {
     private readonly List<OrderItem> _orderItems = [];
     public IReadOnlyList<OrderItem> OrderItems => _orderItems.AsReadOnly();
-    public CustomerId CustomerId { get; private set; } = default!;
-    public OrderName OrderName { get; private set; } = default!;
+    public CustomerId CustomerId { get; private set; }
+    public OrderName OrderName { get; private set; }
     public Address ShippingAddress { get; private set; } = default!;
     public Address BillingAddress { get; private set; } = default!;
     public Payment Payment { get; private set; } = default!;
     public OrderStatus Status { get; private set; } = OrderStatus.Pending;
 
-    public decimal TotalPrice => OrderItems.Sum(x => x.Price * x.Quantity);
+    public decimal TotalPrice
+    {
+        get => OrderItems.Sum(x => x.Price * x.Quantity);
+        // ReSharper disable once ValueParameterNotUsed - Required by EF Core
+        private set { }
+    }
 
     public static Order Create(OrderId id, CustomerId customerId, OrderName orderName, Address shippingAddress,
         Address billingAddress, Payment payment)
@@ -42,6 +47,15 @@ public class Order : Aggregate<OrderId>
         Status = status;
 
         AddDomainEvent(new OrderUpdatedEvent(this));
+    }
+
+    public void Add(ProductId productId, int quantity, decimal price)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(quantity);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price);
+
+        OrderItem orderItem = new(Id, productId, quantity, price);
+        _orderItems.Add(orderItem);
     }
 
     public void Remove(ProductId productId)

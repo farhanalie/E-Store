@@ -22,7 +22,8 @@ public record Address
     public string State { get; } = default!;
     public string ZipCode { get; } = default!;
 
-    public static Address Of(string firstName, string lastName, string emailAddress, string addressLine, string country,
+    public static Address From(string firstName, string lastName, string emailAddress, string addressLine,
+        string country,
         string state, string zipCode)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(firstName);

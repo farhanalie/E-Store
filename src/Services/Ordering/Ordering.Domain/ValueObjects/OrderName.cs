@@ -1,13 +1,10 @@
 ﻿namespace Ordering.Domain.ValueObjects;
 
-public record OrderName
+[ValueObject<string>]
+public readonly partial struct OrderName
 {
-    private OrderName(string value) => Value = value;
-    public string Value { get; }
-
-    public static OrderName Of(string value)
+    private static Validation Validate(string value)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(value);
-        return new OrderName(value);
+        return string.IsNullOrWhiteSpace(value) ? Validation.Invalid("Order name cannot be empty") : Validation.Ok;
     }
 }

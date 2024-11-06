@@ -1,18 +1,10 @@
 ﻿namespace Ordering.Domain.ValueObjects;
 
-public record OrderId
+[ValueObject<Guid>]
+public readonly partial struct OrderId
 {
-    private OrderId(Guid value) => Value = value;
-    public Guid Value { get; }
-
-    public static OrderId Of(Guid value)
+    private static Validation Validate(Guid input)
     {
-        ArgumentNullException.ThrowIfNull(value);
-        if (value == Guid.Empty)
-        {
-            throw new DomainException("OrderId cannot be empty.");
-        }
-
-        return new OrderId(value);
+        return input == Guid.Empty ? Validation.Invalid("OrderId cannot be empty.") : Validation.Ok;
     }
 }

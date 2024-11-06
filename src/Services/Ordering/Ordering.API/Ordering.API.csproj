@@ -1,14 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>4c863ec8-0c29-4fd1-9a4a-5d4091c0dc4d</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <DockerfileContext>..\..\..</DockerfileContext>
+        <DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Ordering.Application\Ordering.Application.csproj" />
-      <ProjectReference Include="..\Ordering.Infastructure\Ordering.Infastructure.csproj" />
+        <ProjectReference Include="..\Ordering.Application\Ordering.Application.csproj"/>
+        <ProjectReference Include="..\Ordering.Infrastructure\Ordering.Infrastructure.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.7.0"/>
+        <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.7.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0"/>
     </ItemGroup>
 
 </Project>
