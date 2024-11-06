@@ -6,7 +6,7 @@ public class CatalogInitialData : IInitialData
 {
     public async Task Populate(IDocumentStore store, CancellationToken cancellation)
     {
-        await using var session = store.LightweightSession();
+        await using IDocumentSession session = store.LightweightSession();
 
         if (await session.Query<Product>().AnyAsync(cancellation))
         {
@@ -19,78 +19,84 @@ public class CatalogInitialData : IInitialData
 
     private static IEnumerable<Product> GetPreconfiguredProducts()
     {
-        return new List<Product>
-        {
-            new()
+        return
+        [
+            new Product
             {
-                Id = new ProductId(1),
+                Id = ProductId.From(1),
                 Name = "IPhone X",
                 Description =
                     "This phone is the company's biggest change to its flagship smartphone in years. It includes a borderless.",
                 ImageFile = "product-1.png",
                 Price = 950.00M,
-                Category = new List<string> { "Smart Phone" }
+                Category = ["Smart Phone"]
             },
-            new()
+
+            new Product
             {
-                Id = new ProductId(2),
+                Id = ProductId.From(2),
                 Name = "Samsung 10",
                 Description =
                     "This phone is the company's biggest change to its flagship smartphone in years. It includes a borderless.",
                 ImageFile = "product-2.png",
                 Price = 840.00M,
-                Category = new List<string> { "Smart Phone" }
+                Category = ["Smart Phone"]
             },
-            new()
+
+            new Product
             {
-                Id = new ProductId(3),
+                Id = ProductId.From(3),
                 Name = "Huawei Plus",
                 Description =
                     "This phone is the company's biggest change to its flagship smartphone in years. It includes a borderless.",
                 ImageFile = "product-3.png",
                 Price = 650.00M,
-                Category = new List<string> { "White Appliances" }
+                Category = ["White Appliances"]
             },
-            new()
+
+            new Product
             {
-                Id = new ProductId(4),
+                Id = ProductId.From(4),
                 Name = "Xiaomi Mi 9",
                 Description =
                     "This phone is the company's biggest change to its flagship smartphone in years. It includes a borderless.",
                 ImageFile = "product-4.png",
                 Price = 470.00M,
-                Category = new List<string> { "White Appliances" }
+                Category = ["White Appliances"]
             },
-            new()
+
+            new Product
             {
-                Id = new ProductId(5),
+                Id = ProductId.From(5),
                 Name = "HTC U11+ Plus",
                 Description =
                     "This phone is the company's biggest change to its flagship smartphone in years. It includes a borderless.",
                 ImageFile = "product-5.png",
                 Price = 380.00M,
-                Category = new List<string> { "Smart Phone" }
+                Category = ["Smart Phone"]
             },
-            new()
+
+            new Product
             {
-                Id = new ProductId(6),
+                Id = ProductId.From(6),
                 Name = "LG G7 ThinQ",
                 Description =
                     "This phone is the company's biggest change to its flagship smartphone in years. It includes a borderless.",
                 ImageFile = "product-6.png",
                 Price = 240.00M,
-                Category = new List<string> { "Home Kitchen" }
+                Category = ["Home Kitchen"]
             },
-            new()
+
+            new Product
             {
-                Id = new ProductId(7),
+                Id = ProductId.From(7),
                 Name = "Panasonic Lumix",
                 Description =
                     "This phone is the company's biggest change to its flagship smartphone in years. It includes a borderless.",
                 ImageFile = "product-6.png",
                 Price = 240.00M,
-                Category = new List<string> { "Camera" }
+                Category = ["Camera"]
             }
-        };
+        ];
     }
 }

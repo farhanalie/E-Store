@@ -6,16 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Discount.Grpc.Services;
 
-public class DiscountService
-    (DiscountContext dbContext, ILogger<DiscountService> logger) : DiscountProtoService.DiscountProtoServiceBase
+public class DiscountService(DiscountContext dbContext, ILogger<DiscountService> logger)
+    : DiscountProtoService.DiscountProtoServiceBase
 {
     public override async Task<CouponModel> CreateDiscount(CreateDiscountRequest request, ServerCallContext context)
     {
-        var coupon = request.Coupon.Adapt<Coupon>();
-        if (coupon is null)
-        {
-            throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid Coupon"));
-        }
+        Coupon coupon = request.Coupon.Adapt<Coupon>() ??
+                        throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid Coupon"));
 
         dbContext.Coupons.Add(coupon);
         await dbContext.SaveChangesAsync();
@@ -27,7 +24,7 @@ public class DiscountService
 
     public override async Task<CouponModel> GetDiscount(GetDiscountRequest request, ServerCallContext context)
     {
-        var coupon = await dbContext.Coupons.FirstOrDefaultAsync(c => c.ProductId == request.ProductId);
+        Coupon? coupon = await dbContext.Coupons.FirstOrDefaultAsync(c => c.ProductId == request.ProductId);
         if (coupon is null)
         {
             return new CouponModel
@@ -46,11 +43,8 @@ public class DiscountService
 
     public override async Task<CouponModel> UpdateDiscount(UpdateDiscountRequest request, ServerCallContext context)
     {
-        var coupon = request.Coupon.Adapt<Coupon>();
-        if (coupon is null)
-        {
-            throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid Coupon"));
-        }
+        Coupon coupon = request.Coupon.Adapt<Coupon>() ??
+                        throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid Coupon"));
 
         dbContext.Coupons.Update(coupon);
         await dbContext.SaveChangesAsync();
@@ -62,11 +56,8 @@ public class DiscountService
     public override async Task<DeleteDiscountResponse> DeleteDiscount(DeleteDiscountRequest request,
         ServerCallContext context)
     {
-        var coupon = await dbContext.Coupons.FirstOrDefaultAsync(c => c.ProductId == request.ProductId);
-        if (coupon is null)
-        {
-            throw new RpcException(new Status(StatusCode.NotFound, "Discount not found"));
-        }
+        Coupon? coupon = await dbContext.Coupons.FirstOrDefaultAsync(c => c.ProductId == request.ProductId) ??
+                         throw new RpcException(new Status(StatusCode.NotFound, "Discount not found"));
 
         dbContext.Coupons.Remove(coupon);
         await dbContext.SaveChangesAsync();

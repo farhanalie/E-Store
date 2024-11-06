@@ -12,7 +12,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
         CancellationToken cancellationToken)
     {
         logger.LogError(
-            "Error Message: {exceptionMessage}, Time of occurrence {time}",
+            "Error Message: {ExceptionMessage}, Time of occurrence {Time}",
             exception.Message, DateTime.UtcNow);
 
         (string Detail, string Title, int StatusCode) details = exception switch
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             )
         };
 
-        var problemDetails = new ProblemDetails
+        ProblemDetails problemDetails = new ProblemDetails
         {
             Title = details.Title,
             Detail = details.Detail,

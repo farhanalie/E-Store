@@ -1,6 +1,6 @@
-﻿using StronglyTypedIds;
+﻿using Vogen;
 
 namespace BuildingBlocks.Identifiers;
 
-[StronglyTypedId(Template.String)]
-public partial struct UserId;
+[ValueObject<string>]
+public readonly partial struct UserId;

@@ -10,6 +10,7 @@ builder.Services
     {
         // Establish the connection string to your Marten database
         options.Connection(connectionString);
+
         // Specify that we want to use STJ as our serializer
         options.UseSystemTextJsonForSerialization();
 
@@ -19,13 +20,11 @@ builder.Services
     .UseLightweightSessions();
 
 var redisConnectionString = builder.Configuration.GetConnectionString("Redis")!;
-builder.Services.AddStackExchangeRedisCache(options => { options.Configuration = redisConnectionString; });
+builder.Services.AddStackExchangeRedisCache(options => options.Configuration = redisConnectionString);
 
 //Grpc Services
 builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(options =>
-    {
-        options.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]!);
-    })
+        options.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]!))
     .ConfigurePrimaryHttpMessageHandler(() =>
     {
         var handler = new HttpClientHandler

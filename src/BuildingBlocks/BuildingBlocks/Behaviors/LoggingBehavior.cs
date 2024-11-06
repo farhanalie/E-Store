@@ -4,8 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BuildingBlocks.Behaviors;
 
-public class LoggingBehavior<TRequest, TResponse>
-    (ILogger<LoggingBehavior<TRequest, TResponse>> logger)
+public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TRequest, TResponse>> logger)
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
     where TResponse : notnull
@@ -16,16 +15,19 @@ public class LoggingBehavior<TRequest, TResponse>
         logger.LogInformation("[START] Handle request={Request} - Response={Response} - RequestData={RequestData}",
             typeof(TRequest).Name, typeof(TResponse).Name, request);
 
-        var timer = new Stopwatch();
+        Stopwatch timer = new Stopwatch();
         timer.Start();
 
-        var response = await next();
+        TResponse response = await next();
 
         timer.Stop();
-        var timeTaken = timer.Elapsed;
-        if (timeTaken.Seconds > 3) // if the request is greater than 3 seconds, then log the warnings
+        TimeSpan timeTaken = timer.Elapsed;
+        if (timeTaken.Seconds > 3)
+        {
+            // if the request is greater than 3 seconds, then log the warnings
             logger.LogWarning("[PERFORMANCE] The request {Request} took {TimeTaken} seconds.",
                 typeof(TRequest).Name, timeTaken.Seconds);
+        }
 
         logger.LogInformation("[END] Handled {Request} with {Response}", typeof(TRequest).Name, typeof(TResponse).Name);
         return response;

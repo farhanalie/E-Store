@@ -14,7 +14,7 @@ public static class DependencyInjection
     {
         builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
-        var assembly = Assembly.GetEntryAssembly()!;
+        Assembly assembly = Assembly.GetEntryAssembly()!;
 
         builder.Services.AddMediatR(cfg =>
         {
@@ -29,7 +29,7 @@ public static class DependencyInjection
         return builder;
     }
 
-    private class DependencyContextAssemblyCatalogCustom(Assembly assembly) : DependencyContextAssemblyCatalog
+    private sealed class DependencyContextAssemblyCatalogCustom(Assembly assembly) : DependencyContextAssemblyCatalog
     {
         public override IReadOnlyCollection<Assembly> GetAssemblies()
         {

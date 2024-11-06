@@ -1,10 +1,10 @@
 using Catalog.API.Data;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.AddBuildingBlocks();
 
-var connectionString = builder.Configuration.GetConnectionString("Database")!;
+string connectionString = builder.Configuration.GetConnectionString("Database")!;
 builder.Services
     .AddMarten(options =>
     {
@@ -16,12 +16,14 @@ builder.Services
     .UseLightweightSessions();
 
 if (builder.Environment.IsDevelopment())
+{
     builder.Services.InitializeMartenWith<CatalogInitialData>();
+}
 
 builder.Services.AddHealthChecks()
     .AddNpgSql(connectionString);
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 app.UseBuildingBlocks();
 
