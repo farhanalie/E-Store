@@ -1,11 +1,10 @@
 using Discount.Grpc;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.AddBuildingBlocks();
-
-var connectionString = builder.Configuration.GetConnectionString("Database")!;
+string connectionString = builder.Configuration.GetConnectionString("Database")!;
 builder.Services
+    .AddBuildingBlocks()
     .AddMarten(options =>
     {
         // Establish the connection string to your Marten database
@@ -19,7 +18,7 @@ builder.Services
     })
     .UseLightweightSessions();
 
-var redisConnectionString = builder.Configuration.GetConnectionString("Redis")!;
+string redisConnectionString = builder.Configuration.GetConnectionString("Redis")!;
 builder.Services.AddStackExchangeRedisCache(options => options.Configuration = redisConnectionString);
 
 //Grpc Services
@@ -27,7 +26,7 @@ builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(
         options.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]!))
     .ConfigurePrimaryHttpMessageHandler(() =>
     {
-        var handler = new HttpClientHandler
+        HttpClientHandler handler = new()
         {
             ServerCertificateCustomValidationCallback =
                 HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
@@ -43,7 +42,7 @@ builder.Services.AddHealthChecks()
     .AddNpgSql(connectionString)
     .AddRedis(redisConnectionString);
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 app.UseBuildingBlocks();
 

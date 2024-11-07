@@ -2,10 +2,9 @@ using Catalog.API.Data;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.AddBuildingBlocks();
-
 string connectionString = builder.Configuration.GetConnectionString("Database")!;
 builder.Services
+    .AddBuildingBlocks()
     .AddMarten(options =>
     {
         // Establish the connection string to your Marten database

@@ -3,30 +3,47 @@ using BuildingBlocks.Behaviors;
 using BuildingBlocks.Exceptions;
 using Carter;
 using FluentValidation;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace BuildingBlocks;
 
 public static class DependencyInjection
 {
-    public static IHostApplicationBuilder AddBuildingBlocks(this IHostApplicationBuilder builder)
+    public static IServiceCollection AddBuildingBlocks(this IServiceCollection services)
     {
-        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+        services.AddExceptionHandler<GlobalExceptionHandler>();
 
-        Assembly assembly = Assembly.GetEntryAssembly()!;
+        Assembly assembly = Assembly.GetCallingAssembly();
 
-        builder.Services.AddMediatR(cfg =>
+        services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(assembly);
             cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
             cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
         });
 
-        builder.Services.AddValidatorsFromAssembly(assembly);
+        services.AddValidatorsFromAssembly(assembly);
 
-        builder.Services.AddCarter(new DependencyContextAssemblyCatalogCustom(assembly));
-        return builder;
+        Assembly entryAssembly = Assembly.GetEntryAssembly() ?? assembly;
+
+        services.AddCarter(new DependencyContextAssemblyCatalogCustom(entryAssembly));
+        return services;
+    }
+
+    public static void UseBuildingBlocks(this WebApplication app)
+    {
+        app.MapCarter();
+
+        app.UseExceptionHandler(options => { });
+
+        app.UseHealthChecks("/health",
+            new HealthCheckOptions
+            {
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
     }
 
     private sealed class DependencyContextAssemblyCatalogCustom(Assembly assembly) : DependencyContextAssemblyCatalog
