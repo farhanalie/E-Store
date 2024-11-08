@@ -4,11 +4,11 @@ namespace Ordering.Application.Orders.Queries;
 
 public static class GetOrders
 {
-    public record Query : PaginationRequest, IQuery<ErrorOr<Result>>;
+    public sealed record Query : PaginationRequest, IQuery<ErrorOr<Result>>;
 
-    public record Result : PaginatedResult<OrderDto>;
+    public sealed record Result : PaginatedResult<OrderDto>;
 
-    public class Handler(IAppDbContext dbContext) : IQueryHandler<Query, ErrorOr<Result>>
+    internal sealed class Handler(IAppDbContext dbContext) : IQueryHandler<Query, ErrorOr<Result>>
     {
         public async Task<ErrorOr<Result>> Handle(Query request, CancellationToken cancellationToken)
         {

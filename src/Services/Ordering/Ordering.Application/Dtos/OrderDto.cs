@@ -1,5 +1,4 @@
 ﻿using Ordering.Domain.Enums;
-using Ordering.Domain.ValueObjects;
 
 namespace Ordering.Application.Dtos;
 
