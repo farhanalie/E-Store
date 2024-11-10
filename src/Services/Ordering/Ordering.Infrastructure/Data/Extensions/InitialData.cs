@@ -13,10 +13,10 @@ internal class InitialData
     public static IEnumerable<Product> Products =>
         new List<Product>
         {
-            Product.Create(ProductId.From(new Guid("5334c996-8457-4cf0-815c-ed2b77c4ff61")), "IPhone X", 500),
-            Product.Create(ProductId.From(new Guid("c67d6323-e8b1-4bdf-9a75-b0d0d2e7e914")), "Samsung 10", 400),
-            Product.Create(ProductId.From(new Guid("4f136e9f-ff8c-4c1f-9a33-d12f689bdab8")), "Huawei Plus", 650),
-            Product.Create(ProductId.From(new Guid("6ec1297b-ec0a-4aa1-be25-6726e3b51a27")), "Xiaomi Mi", 450)
+            Product.Create(ProductId.From(1), "IPhone X", 950),
+            Product.Create(ProductId.From(2), "Samsung 10", 840),
+            Product.Create(ProductId.From(3), "Huawei Plus", 650),
+            Product.Create(ProductId.From(4), "Xiaomi Mi", 450)
         };
 
     public static IEnumerable<Order> OrdersWithItems
@@ -39,8 +39,8 @@ internal class InitialData
                 address1,
                 address1,
                 payment1);
-            order1.Add(ProductId.From(new Guid("5334c996-8457-4cf0-815c-ed2b77c4ff61")), 2, 500);
-            order1.Add(ProductId.From(new Guid("c67d6323-e8b1-4bdf-9a75-b0d0d2e7e914")), 1, 400);
+            order1.Add(ProductId.From(1), 2, 950);
+            order1.Add(ProductId.From(2), 1, 840);
 
             Order order2 = Order.Create(
                 OrderId.From(Guid.NewGuid()),
@@ -49,8 +49,8 @@ internal class InitialData
                 address2,
                 address2,
                 payment2);
-            order2.Add(ProductId.From(new Guid("4f136e9f-ff8c-4c1f-9a33-d12f689bdab8")), 1, 650);
-            order2.Add(ProductId.From(new Guid("6ec1297b-ec0a-4aa1-be25-6726e3b51a27")), 2, 450);
+            order2.Add(ProductId.From(3), 1, 650);
+            order2.Add(ProductId.From(4), 2, 450);
 
             return [order1, order2];
         }

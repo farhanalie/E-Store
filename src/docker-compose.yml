@@ -13,6 +13,9 @@ services:
 
   distributedcache:
     image: redis
+        
+  messagebroker:
+    image: rabbitmq:management
 
   basket.api:
     image: ${DOCKER_REGISTRY-}basketapi
@@ -38,8 +41,3 @@ services:
 volumes:
   postgres_catalog:
   postgres_basket:
-
-
-
-
-

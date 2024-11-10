@@ -7,7 +7,9 @@ builder.Services
     .AddApplicationServices(builder.Configuration)
     .AddInfrastructureServices(builder.Configuration);
 
-builder.Services.AddHealthChecks();
+builder.Services
+    .AddHealthChecks()
+    .AddSqlServer(builder.Configuration.GetConnectionString("Database")!);
 
 WebApplication app = builder.Build();
 

@@ -1,10 +1,10 @@
 ﻿namespace Ordering.Domain.ValueObjects;
 
-[ValueObject<Guid>]
+[ValueObject<int>]
 public readonly partial struct ProductId
 {
-    private static Validation Validate(Guid value)
+    private static Validation Validate(int value)
     {
-        return value == Guid.Empty ? Validation.Invalid("Product Id cannot be empty") : Validation.Ok;
+        return value <= 0 ? Validation.Invalid("Product Id cannot be less than or equal to zero") : Validation.Ok;
     }
 }

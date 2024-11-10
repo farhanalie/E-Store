@@ -41,6 +41,9 @@ public static class UpdateOrder
                 request.Payment.ToEntity(),
                 request.Status);
 
+            dbContext.Orders.Update(order);
+            await dbContext.SaveChangesAsync(cancellationToken);
+
             return Result.Updated;
         }
     }

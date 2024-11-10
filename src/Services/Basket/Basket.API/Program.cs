@@ -1,3 +1,4 @@
+using BuildingBlocks.Messaging.MassTransit;
 using Discount.Grpc;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -34,6 +35,9 @@ builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(
 
         return handler;
     });
+
+//Async Communication Services
+builder.Services.AddMessageBroker(builder.Configuration);
 
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 builder.Services.Decorate<IBasketRepository, CachedBasketRepository>();
